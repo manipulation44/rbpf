@@ -47,6 +47,8 @@ macro_rules! libc_error_guard {
                 let errno = *libc::__errno();
                 #[cfg(target_os = "linux")]
                 let errno = *libc::__errno_location();
+                #[cfg(target_os = "dragonfly")]
+                let errno = *errno_dragonfly::errno_location();
                 return Err(EbpfError::LibcInvocationFailed(stringify!($function), args, errno));
             }
         }
